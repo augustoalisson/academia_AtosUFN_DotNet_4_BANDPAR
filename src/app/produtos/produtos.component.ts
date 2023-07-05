@@ -1,31 +1,31 @@
 import { Component } from '@angular/core';
-import { ProdutoService } from './services/produto.service';
-import { Produto } from './models/produto';
+import { ProdutoService } from '../services/produto.service';
+import { Produto } from '../models/produto';
 import { NgForm } from '@angular/forms';
+import { FornecedoresComponent } from '../fornecedores/fornecedores.component';
+import { FornecedorService } from '../services/fornecedor.service';
+import { Fornecedor } from '../models/fornecedor';
+
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'app-produtos',
+  templateUrl: './produtos.component.html',
+  styleUrls: ['./produtos.component.css']
 })
-export class AppComponent {
-  title = 'BandPar';
+export class ProdutosComponent {
+  //title = 'BandPar';
 
   produto = {} as Produto;
   produtos: Produto[] = [];
 
-  constructor(private produtoService: ProdutoService) {}
+  fornecedor = {} as Fornecedor;
+  fornecedores: Fornecedor[] = [];
+
+  constructor(private produtoService: ProdutoService, private fornecedorService: FornecedorService) {}
   
   ngOnInit() {
     this.getProdutos();
   }
 
-  /*
-  addPessoa(){
-    this.pessoa.nome = "Astolfo";
-    this.pessoaService.savePessoa(this.pessoa);
- 
-  }
-  */
 
   saveProduto(form: NgForm) {
     if (this.produto.id !== undefined) {
@@ -33,6 +33,7 @@ export class AppComponent {
         this.cleanForm(form);
       });
     } else {
+      //console.log(this.produto);
       this.produtoService.saveProduto(this.produto).subscribe(() => {
         this.cleanForm(form);
       });
@@ -65,6 +66,12 @@ export class AppComponent {
     this.getProdutos();
     form.resetForm();
     this.produto = {} as Produto;
+  }
+
+  getFornecedores() {
+    this.fornecedorService.getFornecedores().subscribe((fornecedores: Fornecedor[]) => {
+      this.fornecedores = fornecedores;
+    });
   }
 
 }
